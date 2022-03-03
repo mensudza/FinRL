@@ -7,7 +7,7 @@ import matplotlib
 import numpy as np
 import pandas as pd
 from gym import spaces
-from stable_baselines3.common.logger import Logger as logger
+from stable_baselines3.common.logger import Logger
 #from stable_baselines3.common import utils
 from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 
@@ -91,6 +91,7 @@ class StockTradingEnvCashpenalty(gym.Env):
             low=-np.inf, high=np.inf, shape=(self.state_space,)
         )
         #self._logger = utils.configure_logger(self.verbose, self.tensorboard_log, tb_log_name, reset_num_timesteps)
+        
         self.turbulence = 0
         self.episode = -1  # initialize so we can call reset
         self.episode_history = []
@@ -176,27 +177,27 @@ class StockTradingEnvCashpenalty(gym.Env):
         self.log_step(reason=reason, terminal_reward=reward)
         # Add outputs to logger interface
         gl_pct = self.account_information["total_assets"][-1] / self.initial_amount
-        logger.record("environment/GainLoss_pct", (gl_pct - 1) * 100)
-        logger.record(
+        Logger.record("environment/GainLoss_pct", (gl_pct - 1) * 100)
+        Logger.record(
             "environment/total_assets",
             int(self.account_information["total_assets"][-1]),
         )
         reward_pct = self.account_information["total_assets"][-1] / self.initial_amount
-        logger.record("environment/total_reward_pct", (reward_pct - 1) * 100)
-        logger.record("environment/total_trades", self.sum_trades)
-        logger.record(
+        Logger.record("environment/total_reward_pct", (reward_pct - 1) * 100)
+        Logger.record("environment/total_trades", self.sum_trades)
+        Logger.record(
             "environment/avg_daily_trades",
             self.sum_trades / (self.current_step),
         )
-        logger.record(
+        Logger.record(
             "environment/avg_daily_trades_per_asset",
             self.sum_trades / (self.current_step) / len(self.assets),
         )
-        logger.record("environment/completed_steps", self.current_step)
-        logger.record(
+        Logger.record("environment/completed_steps", self.current_step)
+        Logger.record(
             "environment/sum_rewards", np.sum(self.account_information["reward"])
         )
-        logger.record(
+        Logger.record(
             "environment/cash_proportion",
             self.account_information["cash"][-1]
             / self.account_information["total_assets"][-1],

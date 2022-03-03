@@ -356,7 +356,7 @@ class StockTradingEnvCashpenalty(gym.Env):
                 transactions
             )  # capture what the model's could do
             # verify we didn't do anything impossible here
-            assert (spend + costs) <= coh
+            #assert (spend + costs) <= coh
             # update our holdings
             coh = coh - spend - costs
             holdings_updated = self.holdings + transactions

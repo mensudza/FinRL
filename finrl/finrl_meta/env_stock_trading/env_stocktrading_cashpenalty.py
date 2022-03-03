@@ -7,7 +7,8 @@ import matplotlib
 import numpy as np
 import pandas as pd
 from gym import spaces
-from stable_baselines3.common import logger
+from stable_baselines3.common.logger import Logger as logger
+#from stable_baselines3.common import utils
 from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 
 matplotlib.use("Agg")
@@ -89,6 +90,7 @@ class StockTradingEnvCashpenalty(gym.Env):
         self.observation_space = spaces.Box(
             low=-np.inf, high=np.inf, shape=(self.state_space,)
         )
+        #self._logger = utils.configure_logger(self.verbose, self.tensorboard_log, tb_log_name, reset_num_timesteps)
         self.turbulence = 0
         self.episode = -1  # initialize so we can call reset
         self.episode_history = []
